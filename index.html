@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rig Builder | Engineer Your Ultimate Rig</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#303030",
+                    "surface-container-high": "#2a2a2a",
+                    "secondary-fixed-dim": "#c7c6c6",
+                    "on-primary-fixed-variant": "#862200",
+                    "error": "#ffb4ab",
+                    "on-primary-container": "#531200",
+                    "on-secondary": "#2f3131",
+                    "on-primary-fixed": "#3b0a00",
+                    "on-tertiary": "#2f3131",
+                    "inverse-primary": "#af3000",
+                    "error-container": "#93000a",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "surface-bright": "#393939",
+                    "surface-dim": "#131313",
+                    "secondary-container": "#464747",
+                    "tertiary": "#c6c6c6",
+                    "surface-container-low": "#1b1c1c",
+                    "on-background": "#e4e2e1",
+                    "primary-fixed-dim": "#ffb59f",
+                    "surface-variant": "#353535",
+                    "surface": "#131313",
+                    "on-error": "#690005",
+                    "primary-fixed": "#ffdbd1",
+                    "on-secondary-fixed-variant": "#464747",
+                    "secondary-fixed": "#e3e2e2",
+                    "tertiary-fixed-dim": "#c6c6c6",
+                    "tertiary-container": "#909191",
+                    "on-error-container": "#ffdad6",
+                    "outline-variant": "#5b4039",
+                    "inverse-surface": "#e4e2e1",
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-tertiary-container": "#282a2a",
+                    "secondary": "#c7c6c6",
+                    "surface-tint": "#ffb59f",
+                    "outline": "#ab897f",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-primary": "#5f1600",
+                    "surface-container-highest": "#353535",
+                    "background": "#131313",
+                    "on-surface-variant": "#e56236",
+                    "on-secondary-container": "#b5b5b5",
+                    "on-surface": "#e4e2e1",
+                    "primary-container": "#ff5720",
+                    "primary": "#ffb59f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kinetic-gradient {
+            background: linear-gradient(135deg, #ffb59f 0%, #ff5720 100%);
+        }
+        .glass-panel {
+            background: rgba(31, 32, 32, 0.6);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body selection:bg-primary-container selection:text-white">
+<!-- TopNavBar -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0e0e0e] flex justify-between items-center w-full px-8 h-20 max-w-none">
+<div class="flex items-center gap-12">
+<a href="index.html" class="text-2xl font-black text-[#FF551D] tracking-tighter font-headline">Rig Builder</a>
+<div class="hidden md:flex gap-8 items-center h-full">
+<a class="font-headline uppercase tracking-wider font-bold text-sm text-gray-400 hover:text-white transition-colors" href="garage.html">Inventory</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<a href="register.html" class="hidden lg:inline-flex items-center justify-center kinetic-gradient text-on-primary-container font-headline font-bold uppercase tracking-widest text-xs py-3 px-6 rounded-sm active:scale-95 duration-150 transition-all">
+                Start Your Build
+            </a>
+<div class="flex gap-4 text-gray-400 items-center">
+<a href="login.html" class="text-gray-400 hover:text-white transition-all" aria-label="Log in"><span class="material-symbols-outlined">person</span></a>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative h-[921px] w-full flex items-center overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover grayscale brightness-50" data-alt="Ultra-realistic side profile of a matte black custom off-road truck in a dark moody studio with orange neon rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCE32eAfPfA2mAwST5px4PuZZxtGGieyCM3PH2xl7awqm4Vc6ZwdT6dPpE2DUx0Ls_kBParmE07PJNnStHwwwzv8PHyAUrh-wfoDVc8qtgnf35VHNMvp1KeZccHTC6VwB2dSdsktXh3CN8jAjhAd05mBBObrcOSrXNaeS8F2OWDMSRN2reBekjR1hqVtA1xVJvEwJuZww-Cetqx1LZTqnYA-svMAOYdLzaFl9J_oNXQh7P8hEaIh71zFHoLiL5ThtpUFU6YQIPXKw"/>
+<div class="absolute inset-0 bg-gradient-to-r from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent"></div>
+</div>
+<div class="relative z-10 px-12 md:px-24 w-full max-w-6xl">
+<p class="font-headline text-primary-container font-bold tracking-[0.3em] text-sm mb-4 uppercase">Advanced Configuration Platform</p>
+<h1 class="font-headline text-6xl md:text-8xl font-black leading-none tracking-tighter mb-8 text-white uppercase italic">
+                    Engineer Your <br/>
+<span class="text-transparent bg-clip-text kinetic-gradient">Ultimate Rig</span>
+</h1>
+<div class="flex flex-wrap gap-6 items-center">
+<button class="kinetic-gradient text-on-primary-container px-10 py-5 font-headline font-bold uppercase tracking-widest rounded-sm">
+                        Initialize Visualizer
+                    </button>
+<button class="border border-outline-variant/30 text-on-surface px-10 py-5 font-headline font-bold uppercase tracking-widest rounded-sm hover:bg-surface-container-high transition-all">
+                        GET Windows EXE
+                    </button>
+</div>
+</div>
+<!-- Floating Detail Overlay -->
+<div class="absolute bottom-12 right-12 hidden xl:block">
+<div class="glass-panel p-6 rounded-sm border border-outline-variant/10 max-w-xs">
+<div class="flex justify-between items-start mb-4">
+<span class="text-[10px] uppercase font-headline tracking-widest text-primary">Current Preview</span>
+<span class="material-symbols-outlined text-xs text-primary">sensors</span>
+</div>
+<p class="font-headline font-bold text-lg mb-2">APEX-X FRAME 2024</p>
+<div class="space-y-3">
+<div class="flex justify-between text-xs border-b border-outline-variant/10 pb-1">
+<span class="text-on-surface-variant">Wheelbase</span>
+<span class="font-mono text-white">145.7 in</span>
+</div>
+<div class="flex justify-between text-xs border-b border-outline-variant/10 pb-1">
+<span class="text-on-surface-variant">Tire Specs</span>
+<span class="font-mono text-white">37" All-Terrain</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Suspension</span>
+<span class="font-mono text-white">Fox Live Valve</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- The Ultimate Visualizer (Bento Style) -->
+<section class="py-32 px-8 max-w-7xl mx-auto">
+<div class="mb-20 space-y-4">
+<h2 class="font-headline text-4xl font-bold tracking-tight text-white italic uppercase">The Ultimate Visualizer</h2>
+<div class="h-1 w-24 kinetic-gradient"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[700px]">
+<div class="md:col-span-8 bg-surface-container relative rounded-sm overflow-hidden group">
+<img class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-700" data-alt="Macro close-up of a 3D wireframe mesh of a truck wheel being textured in a dark digital software interface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDECv4Q7pzgs0Zl4w_fhFxp_At7Tnm3t4iNp6AovBpoHquZvAxCVRIc4s7JtnPPZPEMcP4st7K5bSwX-WHarqwDIyKidoXf6wPywk-3xbz-D579aTEVTtjxqlUs5yPtuDmHybqAT1dMK9-0guqyuZF5_eD6MV-bGG-7Jbhz6-AeFGUq2_wDksUa4B1Moe8AIxyjNDBhY6irzcJ4gw1zN5RVN4XyfDOkH0ZpcnWpOIx-wZki1lj_BUDb_vuP7clHeQyaklsHY_voi3k"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest to-transparent p-12 flex flex-col justify-end">
+<h3 class="font-headline text-3xl font-black text-white mb-4">REAL-TIME PATH TRACING</h3>
+<p class="text-on-surface-variant max-w-md">Experience hyper-realistic materials, shadows, and reflections with our proprietary rendering engine. Every bolt and beadlock is rendered in 1:1 detail.</p>
+</div>
+</div>
+<div class="md:col-span-4 bg-surface-container-high rounded-sm p-10 flex flex-col justify-between border-t border-primary-container/20">
+<div>
+<span class="material-symbols-outlined text-4xl text-primary mb-6">view_in_ar</span>
+<h3 class="font-headline text-2xl font-bold text-white mb-4">PHYSICS MODELLING</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed">Simulate suspension articulation and wheel offset impacts instantly. Not just a visual tool, but a technical blueprint.</p>
+</div>
+<div class="pt-8">
+<div class="flex items-center gap-4 text-xs font-headline uppercase tracking-widest text-primary font-bold">
+                            EXPLORE ENGINE <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</div>
+</div>
+</div>
+<div class="md:col-span-4 bg-surface-container p-10 rounded-sm flex flex-col justify-center border-l border-primary-container/20">
+<h3 class="font-headline text-2xl font-bold text-white mb-4 italic">600+ COMPONENT LIBRARY</h3>
+<p class="text-on-surface-variant text-sm">Our database is synced with vendor inventory, ensuring every part you see is ready to be shipped and installed.</p>
+</div>
+<div class="md:col-span-8 bg-surface-container-highest rounded-sm relative overflow-hidden">
+<img class="w-full h-full object-cover opacity-30" data-alt="Digital HUD overlay on a mechanical engine part with glowing orange data points and technical text" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRWdFUMsJ0nibaVGv789TbZH2K6zzQIl0XJ2kmvn1dHy0146GcQiPviOVZCcgB8Vo7wJnHvYbukHpEbqtcKgyCA_5WwUBdzWS5Jp0szFR5P5bYQpHtJ9S6IrMP0jj06NILCiO-oUX9oi3H7cATt2vwDywfomH_mPrO-dNany_le1c-BRr4SreL70hCWeaKHuappzZyuI8-gP2YlRhHHFubKVxl8KSG0GfB8ySC6A3jaq7A9F_G8Utwr5J9gi3fru7GE8PVz2MIviM"/>
+<div class="absolute inset-0 p-12 flex items-center justify-between">
+<div class="max-w-sm">
+<h3 class="font-headline text-3xl font-black text-white italic uppercase mb-2">PRECISION FITMENT</h3>
+<p class="text-on-surface-variant">Integrated clash detection guarantees that your chosen wheel and tire combo won't rub on your fenders.</p>
+</div>
+<span class="material-symbols-outlined text-7xl text-white/5 font-black hidden lg:block">precision_manufacturing</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Vendor Partners (Tonal Shift) -->
+<section class="bg-surface-container-low py-24 overflow-hidden">
+<div class="px-8 max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+<div>
+<p class="font-headline text-primary text-xs uppercase tracking-[0.4em] mb-2">Official Integration</p>
+<h2 class="font-headline text-4xl font-bold text-white uppercase italic">Vendor Partners</h2>
+</div>
+<p class="text-on-surface-variant max-w-sm text-sm">We partner with the world's leading off-road manufacturers to provide exact CAD data for every component.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-0.5 bg-outline-variant/10">
+<!-- Brand Placeholder Boxes -->
+<div class="bg-surface-container-low p-12 flex items-center justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-pointer">
+<span class="font-headline font-black text-2xl tracking-tighter text-white">WARN</span>
+</div>
+<div class="bg-surface-container-low p-12 flex items-center justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-pointer">
+<span class="font-headline font-black text-2xl tracking-tighter text-white">FOX</span>
+</div>
+<div class="bg-surface-container-low p-12 flex items-center justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-pointer">
+<span class="font-headline font-black text-2xl tracking-tighter text-white">BFG</span>
+</div>
+<div class="bg-surface-container-low p-12 flex items-center justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-pointer">
+<span class="font-headline font-black text-2xl tracking-tighter text-white">METHOD</span>
+</div>
+<div class="bg-surface-container-low p-12 flex items-center justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-pointer">
+<span class="font-headline font-black text-2xl tracking-tighter text-white">RIGID</span>
+</div>
+<div class="bg-surface-container-low p-12 flex items-center justify-center grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-500 cursor-pointer">
+<span class="font-headline font-black text-2xl tracking-tighter text-white">ARACHNID</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Real-World Builds (Asymmetric Gallery) -->
+<section class="py-32 px-8 max-w-7xl mx-auto">
+<div class="flex items-center gap-6 mb-20">
+<h2 class="font-headline text-5xl font-black text-white italic uppercase leading-none">Real-World<br/><span class="text-primary-container">Builds</span></h2>
+<div class="flex-grow h-px bg-outline-variant/30"></div>
+<div class="hidden md:flex gap-2">
+<button class="w-12 h-12 rounded-sm border border-outline-variant/30 flex items-center justify-center text-white hover:bg-primary-container hover:border-primary-container transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-12 h-12 rounded-sm border border-outline-variant/30 flex items-center justify-center text-white hover:bg-primary-container hover:border-primary-container transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+<!-- Build Card 1 -->
+<div class="flex flex-col group">
+<div class="relative aspect-[4/5] overflow-hidden mb-6">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Heavily customized sand-colored overland truck climbing a rocky mountain pass during sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZm2s9FeVLzYJ8v1-Gp9KjFgIz6CAeh-Ov7JdjnQqqQwPagULyYTHtmgE4-CUHQHP3_r6lY1VZPkxB549yXRzpJ0jfTb102hA4-X4w71QfYOQ3LTdtmEqOycs9USHzzt5SlklbZGmq4jKvez1deblVQ8PkdHxtGsfQ5FwVcjJ17NFA3T_X_6zneNFaxna8fHh1OYJC7VChX3DQ1CQuX0ZoDYv70CECioaq7eD1xt3_PUte-IRgo0oiAEo8pGrQR1Y9UuCwn7Ytn5E"/>
+<div class="absolute top-4 right-4 bg-primary-container px-3 py-1 text-[10px] font-headline font-bold text-white uppercase tracking-widest">Featured Build</div>
+</div>
+<h4 class="font-headline text-xl font-bold text-white mb-1 uppercase">Desert Recon v.4</h4>
+<p class="text-on-surface-variant text-sm mb-4">Created by user @OverlandKing</p>
+<div class="flex gap-2">
+<span class="text-[10px] px-2 py-1 bg-surface-container-high rounded-full border border-outline-variant/20 text-on-surface-variant uppercase">Long-Travel</span>
+<span class="text-[10px] px-2 py-1 bg-surface-container-high rounded-full border border-outline-variant/20 text-on-surface-variant uppercase">Solar-Ready</span>
+</div>
+</div>
+<!-- Build Card 2 (Offset) -->
+<div class="flex flex-col group md:mt-12">
+<div class="relative aspect-[4/5] overflow-hidden mb-6">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Close up of custom red suspension components and off-road tires covered in fresh mud" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzmwWEznPz5X_6sQEwfek8ElMgIwIGO_zlMDV0QoM_223k3PlDHVUXBLyivXHb7RhdFxub_kIENH3l19SXhLB1Y-SXV4uclUO83pWNTbNag1q4TfbVD8_IngUWRKOzqeCqpJJTyhdpw-2jK_JgNYVm_2Z4ZfaGH4XyHuHWKGqdTs74Gry6KREJtvcxI546bdSRpj6kOJleLzYQPieS5v4Oo4hv7W3YMhMtoNOhHJ_QFoCbvogCOadcewJei0wHIidoDPg66dtZQpA"/>
+<div class="absolute inset-0 bg-primary-container/10 group-hover:bg-transparent transition-colors"></div>
+</div>
+<h4 class="font-headline text-xl font-bold text-white mb-1 uppercase">Mud-Stalker Expedition</h4>
+<p class="text-on-surface-variant text-sm mb-4">Created by user @MudRun88</p>
+<div class="flex gap-2">
+<span class="text-[10px] px-2 py-1 bg-surface-container-high rounded-full border border-outline-variant/20 text-on-surface-variant uppercase">Snorkel</span>
+<span class="text-[10px] px-2 py-1 bg-surface-container-high rounded-full border border-outline-variant/20 text-on-surface-variant uppercase">37" Mud-Terrains</span>
+</div>
+</div>
+<!-- Build Card 3 -->
+<div class="flex flex-col group">
+<div class="relative aspect-[4/5] overflow-hidden mb-6">
+<img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="Dark gray custom pickup truck parked on a high mountain ridge with dramatic clouds and snowy peaks behind" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl1cgyVU1ATLYg1cQwvZjcBSiZnHUgPQDJqaAVdVs0H8-6pKb3Fhz64dQx-SPcM80_ETmZRN7dWt9EMX5tvyZFNeo21tLJv2Y9gfGyo-MdUa3VJr5zQBvaPDvlMpQqm_35LTVbtppBwemK7GHnJdW90EV3UTcVhXzp-0Y0bznM5Xnb3i42zDgIrXrcfsMYZ_hPlCjfZYpHDnQED1a91EGNIJsplKQ_Sg3m6rXmMHo4qrxH-hRCRq4gO8kTA3lFoSMNrALPFZwTLow"/>
+</div>
+<h4 class="font-headline text-xl font-bold text-white mb-1 uppercase">Summit Peak Chaser</h4>
+<p class="text-on-surface-variant text-sm mb-4">Created by user @AltitudeApex</p>
+<div class="flex gap-2">
+<span class="text-[10px] px-2 py-1 bg-surface-container-high rounded-full border border-outline-variant/20 text-on-surface-variant uppercase">Winch-Ready</span>
+<span class="text-[10px] px-2 py-1 bg-surface-container-high rounded-full border border-outline-variant/20 text-on-surface-variant uppercase">Roof Rack</span>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-24 px-8">
+<div class="max-w-7xl mx-auto bg-surface-container p-16 rounded-sm relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-12">
+<div class="absolute top-0 right-0 w-1/2 h-full opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[300px] absolute -right-20 -top-20 text-white">settings_accessibility</span>
+</div>
+<div class="relative z-10">
+<h2 class="font-headline text-4xl md:text-5xl font-black text-white italic uppercase leading-none mb-6">READY TO<br/>COMMAND THE DIRT?</h2>
+<p class="text-on-surface-variant text-lg max-w-lg mb-0 leading-relaxed">Join 200,000+ engineers building their dreams. Start with a stock frame and end with a legend.</p>
+</div>
+<div class="relative z-10 w-full md:w-auto">
+<button class="w-full md:w-auto kinetic-gradient text-on-primary-container px-12 py-6 font-headline font-black uppercase tracking-widest text-lg rounded-sm shadow-2xl shadow-primary-container/20 active:scale-95 transition-all">
+                        Launch Builder Now
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#0e0e0e] flex flex-col md:flex-row justify-between items-center w-full px-12 py-16 gap-8 border-t border-[#1f2020]">
+<div class="flex flex-col items-center md:items-start gap-4">
+<span class="text-lg font-bold text-white font-headline">Rig Builder</span>
+<p class="font-['Inter'] text-sm tracking-wide text-gray-500 max-w-xs text-center md:text-left">
+                © 2024 Rig Builder. Engineered for the Wild.
+            </p>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-['Inter'] text-sm tracking-wide text-gray-500 hover:text-[#FF551D] transition-colors" href="#">Vendor Partners</a>
+<a class="font-['Inter'] text-sm tracking-wide text-gray-500 hover:text-[#FF551D] transition-colors" href="#">Privacy Policy</a>
+<a class="font-['Inter'] text-sm tracking-wide text-gray-500 hover:text-[#FF551D] transition-colors" href="#">Terms of Service</a>
+<a class="font-['Inter'] text-sm tracking-wide text-gray-500 hover:text-[#FF551D] transition-colors" href="#">Installation Guides</a>
+</div>
+<div class="flex gap-4">
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-white transition-all cursor-pointer">
+<span class="material-symbols-outlined text-sm">public</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-white transition-all cursor-pointer">
+<span class="material-symbols-outlined text-sm">alternate_email</span>
+</div>
+</div>
+</footer>
+</body></html>

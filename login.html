@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | RIG BUILDER</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-bright": "#393939",
+                    "surface-variant": "#353535",
+                    "on-error": "#690005",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-secondary-container": "#b5b5b5",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "on-primary-fixed": "#3b0a00",
+                    "primary-container": "#ff5720",
+                    "on-background": "#e4e2e1",
+                    "inverse-on-surface": "#303030",
+                    "secondary-fixed": "#e3e2e2",
+                    "primary-fixed": "#ffdbd1",
+                    "surface-container-highest": "#353535",
+                    "on-surface": "#e4e2e1",
+                    "inverse-surface": "#e4e2e1",
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "outline": "#ab897f",
+                    "on-secondary-fixed-variant": "#464747",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-container": "#282a2a",
+                    "error-container": "#93000a",
+                    "tertiary-container": "#909191",
+                    "secondary-fixed-dim": "#c7c6c6",
+                    "on-primary": "#5f1600",
+                    "tertiary-fixed-dim": "#c6c6c6",
+                    "surface-tint": "#ffb59f",
+                    "on-tertiary": "#2f3131",
+                    "surface-dim": "#131313",
+                    "secondary-container": "#464747",
+                    "on-surface-variant": "#e5beb3",
+                    "surface": "#131313",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "on-secondary": "#2f3131",
+                    "error": "#ffb4ab",
+                    "primary": "#ffb59f",
+                    "on-primary-fixed-variant": "#862200",
+                    "primary-fixed-dim": "#ffb59f",
+                    "surface-container-high": "#2a2a2a",
+                    "outline-variant": "#5b4039",
+                    "surface-container": "#1f2020",
+                    "secondary": "#c7c6c6",
+                    "on-primary-container": "#531200",
+                    "background": "#131313",
+                    "tertiary": "#c6c6c6",
+                    "surface-container-low": "#1b1c1c",
+                    "inverse-primary": "#af3000"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .blueprint-grid {
+            background-image: 
+                linear-gradient(to right, rgba(255, 85, 29, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 85, 29, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        input:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body selection:bg-primary-container selection:text-white">
+<main class="min-h-screen flex items-center justify-center relative overflow-hidden">
+<!-- Background Layering -->
+<div class="absolute inset-0 blueprint-grid pointer-events-none"></div>
+<div class="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary-container/10 blur-[120px] rounded-full"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-surface-bright/20 blur-[100px] rounded-full"></div>
+<div class="relative z-10 w-full max-w-6xl px-6 grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch bg-surface-container-low shadow-2xl rounded-sm overflow-hidden">
+<!-- Left Side: Visual/Branding Section -->
+<div class="hidden lg:flex flex-col justify-between p-12 bg-surface relative overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-40 grayscale hover:grayscale-0 transition-all duration-700" data-alt="Technical close-up of a rugged off-road vehicle suspension system with metallic textures and industrial orange accents in dim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADdOcUn6AK_8mtwSycqrJdyzIWpsjy8hIhkROYtk7sFvF-7aYQgVkNgdMeMU2TAYzy6HqFG-62u3pw0HXddIswsvGbKsDaukeN2mKqIWJ2Bv677ZgespFaLIa4i5MEfXDfssKuKDE6P-iOgdE1lZYF8B9f4B7QtX2DuL17ze-VUYQI1qSYw-CvoJuRdeO5rLmEKM7hCOUR151aF3xkCFbz3gaEoD-R2YKI8K-Pi0ZKRwoxLu6ESUyUAmUSSRAE0TSKf5pyOIzn4Ts"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-surface/40"></div>
+</div>
+<div class="relative z-10">
+<h1 class="text-4xl font-headline font-bold tracking-tighter text-white">
+                        RIG BUILDER<span class="text-primary-container">.</span>
+</h1>
+<p class="mt-4 font-body text-on-secondary-container max-w-xs text-sm leading-relaxed uppercase tracking-widest">
+                        Precision Engineering for the Uncharted Path.
+                    </p>
+</div>
+<div class="relative z-10">
+<div class="flex items-center gap-4 text-xs font-label tracking-tighter text-secondary">
+<span class="h-[1px] w-12 bg-primary-container"></span>
+<span class="uppercase">Configuration Module v4.02</span>
+</div>
+</div>
+</div>
+<!-- Right Side: Login Form -->
+<div class="p-8 md:p-16 flex flex-col justify-center bg-surface-container">
+<div class="mb-10">
+<h2 class="text-3xl font-headline font-bold text-white tracking-tight">System Authentication</h2>
+<p class="text-on-secondary-container mt-2 text-sm">Access your custom builds and inventory logs.</p>
+</div>
+<form class="space-y-6">
+<div class="space-y-1">
+<label class="text-[10px] uppercase tracking-[0.2em] font-label text-on-secondary-container ml-1">Email Address</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-highest border-none border-b-2 border-outline-variant py-4 px-4 text-on-surface placeholder:text-surface-bright focus:border-primary-container transition-colors duration-300 rounded-sm font-body" placeholder="operator@rigbuilder.io" type="email"/>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] uppercase tracking-[0.2em] font-label text-on-secondary-container ml-1">Access Key</label>
+<div class="relative group">
+<input class="w-full bg-surface-container-highest border-none border-b-2 border-outline-variant py-4 px-4 text-on-surface placeholder:text-surface-bright focus:border-primary-container transition-colors duration-300 rounded-sm font-body" placeholder="••••••••••••" type="password"/>
+</div>
+</div>
+<div class="flex items-center justify-between mt-2">
+<label class="flex items-center cursor-pointer group">
+<div class="relative">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-4 h-4 bg-surface-container-highest border border-outline-variant rounded-sm peer-checked:bg-primary-container peer-checked:border-primary-container transition-all"></div>
+<span class="material-symbols-outlined absolute inset-0 text-[12px] text-white opacity-0 peer-checked:opacity-100 flex items-center justify-center">check</span>
+</div>
+<span class="ml-2 text-xs font-label text-on-secondary-container group-hover:text-on-surface transition-colors">Remember Session</span>
+</label>
+</div>
+<button class="w-full py-4 bg-gradient-to-r from-[#FF551D] to-[#ff5720] text-white font-headline font-bold uppercase tracking-[0.15em] rounded-sm hover:brightness-110 active:scale-[0.98] transition-all shadow-lg shadow-primary-container/20" type="submit">
+                        Sign In
+                    </button>
+</form>
+<div class="relative my-10">
+<div class="absolute inset-0 flex items-center">
+<div class="w-full border-t border-outline-variant/30"></div>
+</div>
+<div class="relative flex justify-center text-xs uppercase tracking-widest font-label">
+<span class="px-4 bg-surface-container text-surface-bright">External Uplinks</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-4">
+
+</div>
+<div class="mt-10 text-center">
+<p class="text-xs text-on-secondary-container font-label tracking-wide">
+                        New technician? <a class="text-white hover:text-primary-container font-bold border-b border-outline-variant/30 transition-all ml-1" href="#">Create Account</a>
+</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Component as requested for structural alignment, though usually suppressed on focal pages, here rendered per brand hierarchy -->
+<footer class="bg-[#0e0e0e] dark:bg-[#0e0e0e] w-full border-t border-[#1f2020] flex flex-col md:flex-row justify-between items-center px-12 py-12">
+<div class="text-lg font-bold text-white font-headline tracking-tighter mb-4 md:mb-0">RIG BUILDER.</div>
+<div class="flex gap-8">
+<a class="font-['Inter'] text-xs uppercase tracking-[0.2em] text-gray-500 hover:text-[#FF551D] transition-colors duration-200" href="#">Specs</a>
+<a class="font-['Inter'] text-xs uppercase tracking-[0.2em] text-gray-500 hover:text-[#FF551D] transition-colors duration-200" href="#">Privacy</a>
+<a class="font-['Inter'] text-xs uppercase tracking-[0.2em] text-gray-500 hover:text-[#FF551D] transition-colors duration-200" href="#">Terms</a>
+<a class="font-['Inter'] text-xs uppercase tracking-[0.2em] text-gray-500 hover:text-[#FF551D] transition-colors duration-200" href="#">Support</a>
+</div>
+<div class="mt-8 md:mt-0 font-['Inter'] text-xs uppercase tracking-[0.2em] text-gray-500">
+            © 2024 RIG BUILDER. ENGINEERED FOR ADVENTURE.
+        </div>
+</footer>
+</body></html>

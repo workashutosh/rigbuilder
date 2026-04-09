@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rig Builder | Choose Your Base</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#303030",
+                        "surface-container-high": "#2a2a2a",
+                        "secondary-fixed-dim": "#c7c6c6",
+                        "on-primary-fixed-variant": "#862200",
+                        "error": "#ffb4ab",
+                        "on-primary-container": "#531200",
+                        "on-secondary": "#2f3131",
+                        "on-primary-fixed": "#3b0a00",
+                        "on-tertiary": "#2f3131",
+                        "inverse-primary": "#af3000",
+                        "error-container": "#93000a",
+                        "on-secondary-fixed": "#1a1c1c",
+                        "surface-bright": "#393939",
+                        "surface-dim": "#131313",
+                        "secondary-container": "#464747",
+                        "tertiary": "#c6c6c6",
+                        "surface-container-low": "#1b1c1c",
+                        "on-background": "#e4e2e1",
+                        "primary-fixed-dim": "#ffb59f",
+                        "surface-variant": "#353535",
+                        "surface": "#131313",
+                        "on-error": "#690005",
+                        "primary-fixed": "#ffdbd1",
+                        "on-secondary-fixed-variant": "#464747",
+                        "secondary-fixed": "#e3e2e2",
+                        "tertiary-fixed-dim": "#c6c6c6",
+                        "tertiary-container": "#909191",
+                        "on-error-container": "#ffdad6",
+                        "outline-variant": "#5b4039",
+                        "inverse-surface": "#e4e2e1",
+                        "tertiary-fixed": "#e2e2e2",
+                        "on-tertiary-container": "#282a2a",
+                        "secondary": "#c7c6c6",
+                        "surface-tint": "#ffb59f",
+                        "outline": "#ab897f",
+                        "on-tertiary-fixed": "#1a1c1c",
+                        "on-tertiary-fixed-variant": "#454747",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary": "#5f1600",
+                        "surface-container-highest": "#353535",
+                        "background": "#131313",
+                        "on-surface-variant": "#e5beb3",
+                        "on-secondary-container": "#b5b5b5",
+                        "on-surface": "#e4e2e1",
+                        "primary-container": "#ff5720",
+                        "primary": "#ffb59f",
+                        "surface-container": "#1f2020"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .blueprint-grid {
+            background-image: linear-gradient(#1f2020 1px, transparent 1px), linear-gradient(90deg, #1f2020 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-surface-dim text-on-surface font-body selection:bg-primary-container selection:text-white">
+<!-- TopNavBar -->
+<nav class="bg-[#0e0e0e] flex justify-between items-center w-full px-8 h-20 max-w-none sticky top-0 z-50">
+<div class="flex items-center gap-12">
+<a href="index.html" class="text-2xl font-black text-[#FF551D] tracking-tighter font-['Space_Grotesk']">Rig Builder</a>
+<div class="hidden md:flex gap-8">
+<a class="text-gray-400 hover:text-white transition-colors font-['Space_Grotesk'] uppercase tracking-wider font-bold" href="#">Models</a>
+<a class="text-gray-400 hover:text-white transition-colors font-['Space_Grotesk'] uppercase tracking-wider font-bold" href="#">Specs</a>
+<a class="text-[#FF551D] border-b-2 border-[#FF551D] pb-1 font-['Space_Grotesk'] uppercase tracking-wider font-bold" href="garage.html">Inventory</a>
+<a class="text-gray-400 hover:text-white transition-colors font-['Space_Grotesk'] uppercase tracking-wider font-bold" href="#">Support</a>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4 items-center">
+<button type="button" class="material-symbols-outlined text-on-surface-variant hover:text-primary transition-colors bg-transparent border-0 cursor-pointer p-0">settings</button>
+<a href="login.html" class="text-on-surface-variant hover:text-primary transition-colors" aria-label="Log in"><span class="material-symbols-outlined align-middle">person</span></a>
+</div>
+<a href="register.html" class="inline-flex items-center justify-center bg-gradient-to-r from-primary to-primary-container text-on-primary-container px-6 py-2 rounded-sm font-['Space_Grotesk'] uppercase font-bold tracking-widest text-sm hover:scale-95 duration-150 transition-transform">
+                Start Your Build
+            </a>
+</div>
+</nav>
+<main class="flex min-h-screen relative blueprint-grid">
+<!-- Sidebar Filters -->
+<aside class="w-80 bg-surface-container-lowest border-r border-outline-variant/10 p-8 hidden lg:block sticky top-20 h-[calc(100vh-5rem)]">
+<h3 class="font-headline font-bold text-xl uppercase tracking-tighter mb-8 text-on-surface">Filter Specifications</h3>
+<div class="space-y-10">
+<!-- Search -->
+<div class="space-y-3">
+<label class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Model Search</label>
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary">search</span>
+<input class="w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant/30 focus:border-primary focus:ring-0 text-sm py-3 pl-10 transition-colors" placeholder="Type vehicle name..." type="text"/>
+</div>
+</div>
+<!-- Year Filter -->
+<div class="space-y-3">
+<label class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Production Year</label>
+<select class="w-full bg-surface-container-highest border-0 border-b-2 border-outline-variant/30 focus:border-primary focus:ring-0 text-sm py-3 transition-colors appearance-none">
+<option>2024 Models</option>
+<option>2023 Models</option>
+<option>2022 Models</option>
+<option>Pre-Owned</option>
+</select>
+</div>
+<!-- Manufacturer -->
+<div class="space-y-4">
+<label class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Manufacturer</label>
+<div class="flex flex-wrap gap-2">
+<button class="bg-primary-container text-on-primary px-3 py-1.5 text-xs font-bold rounded-sm">All</button>
+<button class="bg-surface-container-high text-on-surface-variant px-3 py-1.5 text-xs font-bold rounded-sm hover:bg-surface-container-highest transition-colors">Jeep</button>
+<button class="bg-surface-container-high text-on-surface-variant px-3 py-1.5 text-xs font-bold rounded-sm hover:bg-surface-container-highest transition-colors">Ford</button>
+<button class="bg-surface-container-high text-on-surface-variant px-3 py-1.5 text-xs font-bold rounded-sm hover:bg-surface-container-highest transition-colors">Toyota</button>
+<button class="bg-surface-container-high text-on-surface-variant px-3 py-1.5 text-xs font-bold rounded-sm hover:bg-surface-container-highest transition-colors">Ram</button>
+</div>
+</div>
+<!-- Drivetrain -->
+<div class="space-y-3">
+<label class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Capability</label>
+<div class="space-y-2">
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="w-4 h-4 bg-surface-container-highest border border-outline-variant rounded-sm flex items-center justify-center group-hover:border-primary transition-colors">
+<div class="w-2 h-2 bg-primary"></div>
+</div>
+<span class="text-sm text-on-surface-variant">4WD Standard</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="w-4 h-4 bg-surface-container-highest border border-outline-variant rounded-sm flex items-center justify-center group-hover:border-primary transition-colors"></div>
+<span class="text-sm text-on-surface-variant">Hybrid Available</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="w-4 h-4 bg-surface-container-highest border border-outline-variant rounded-sm flex items-center justify-center group-hover:border-primary transition-colors"></div>
+<span class="text-sm text-on-surface-variant">Heavy Duty</span>
+</label>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<section class="flex-1 p-8 md:p-16">
+<!-- Hero Header -->
+<div class="mb-16">
+<div class="flex items-center gap-4 mb-4">
+<span class="h-[1px] w-12 bg-primary"></span>
+<span class="font-label text-primary uppercase tracking-[0.3em] font-bold text-xs">Step 01 / Chassis Selection</span>
+</div>
+<h1 class="font-headline text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-4 italic">
+                    CHOOSE YOUR <span class="text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary-container">BASE</span>
+</h1>
+<p class="max-w-2xl text-on-surface-variant text-lg font-light leading-relaxed">
+                    The foundation of your adventure starts here. Select from our curated list of trail-ready platforms, each engineered for extreme terrain and heavy modification.
+                </p>
+</div>
+<!-- Vehicle Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Vehicle Card 1 -->
+<div class="group relative bg-surface-container-low overflow-hidden hover:shadow-[0_0_40px_-10px_rgba(255,87,32,0.3)] transition-all duration-500 border-b-2 border-transparent hover:border-primary">
+<div class="aspect-[16/10] overflow-hidden relative">
+<img alt="Jeep Wrangler Rubicon" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" data-alt="Modern dark gray Jeep Wrangler Rubicon parked on a rugged mountain cliff at dusk with cinematic moody lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLvJ6S8-j49uBca5ec7-CPyGrCcVWtTh0E6NXc2Y-Gf6vGhy4tV2DKCx_UpXT9Irv3gWZQVGcCtijrScywveyA49p5_GHDgAZzOkcwCw-lhcoxqs4H5_lSKYjuXv8rzLAY7dp62MRKyOmsLnyPbX4KQ3GjALvj4_bTH9MezvYf9gk_Trx9rEFIueJrtaPxbHnc2kbbCKvd4Er0fOf5MqBRzbC7UZ0GIPq9U4y0JwgcbVlbqrfguLfnnCzA_sU7V-2DsytA9a1qT5w"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
+<div class="absolute top-4 right-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary">Legendary 4x4</div>
+</div>
+<div class="p-8 space-y-4">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-headline text-3xl font-bold uppercase tracking-tighter leading-tight">Jeep Wrangler</h2>
+<p class="text-on-surface-variant font-label text-sm uppercase tracking-wide">Rubicon 392 Edition</p>
+</div>
+<span class="font-headline font-black text-xl text-on-surface-variant">$75,400</span>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/10">
+<div>
+<span class="block text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Horsepower</span>
+<span class="font-headline font-bold text-lg">470 HP</span>
+</div>
+<div>
+<span class="block text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Suspension</span>
+<span class="font-headline font-bold text-lg">Solid Axle</span>
+</div>
+</div>
+<button class="w-full py-4 bg-surface-container-high text-on-surface uppercase font-bold text-xs tracking-widest group-hover:bg-primary group-hover:text-on-primary transition-all duration-300 flex items-center justify-center gap-2">
+                            Select Frame <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Vehicle Card 2 -->
+<div class="group relative bg-surface-container-low overflow-hidden hover:shadow-[0_0_40px_-10px_rgba(255,87,32,0.3)] transition-all duration-500 border-b-2 border-transparent hover:border-primary">
+<div class="aspect-[16/10] overflow-hidden relative">
+<img alt="Ford F-150 Raptor" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" data-alt="High-speed desert racing Ford F-150 Raptor kicking up sand under intense midday sun with deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpHCtMp0ZC89HA7m0XWBuFg5-FXrSxShURUvuAQZmpWEjavFhvNeQ1O4Qy3clnC84IZB1RGK_KxG8uUT30o_BV90-cX_Idu7H__2SLyVmyznfCjgxZMn5r9kuORrbt-Upsk_VecJgaPLHZ53IuGc7ShPngc6kSX9d6eiVe-PaJAKa0V29PTDFS89M9pT3MS738_a7_JaLpwNv28G-p9g8Z9XRQr7J_DtLRpDHlJ5fxLoNAOMk5tCyKnKQv5OEeAxZJvTVEkUIDsPI"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
+<div class="absolute top-4 right-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary">Baja-Ready</div>
+</div>
+<div class="p-8 space-y-4">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-headline text-3xl font-bold uppercase tracking-tighter leading-tight">Ford F-150</h2>
+<p class="text-on-surface-variant font-label text-sm uppercase tracking-wide">Raptor Performance</p>
+</div>
+<span class="font-headline font-black text-xl text-on-surface-variant">$82,900</span>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/10">
+<div>
+<span class="block text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Tow Capacity</span>
+<span class="font-headline font-bold text-lg">8,200 LBS</span>
+</div>
+<div>
+<span class="block text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Travel</span>
+<span class="font-headline font-bold text-lg">13" Front</span>
+</div>
+</div>
+<button class="w-full py-4 bg-surface-container-high text-on-surface uppercase font-bold text-xs tracking-widest group-hover:bg-primary group-hover:text-on-primary transition-all duration-300 flex items-center justify-center gap-2">
+                            Select Frame <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Vehicle Card 3 -->
+<div class="group relative bg-surface-container-low overflow-hidden hover:shadow-[0_0_40px_-10px_rgba(255,87,32,0.3)] transition-all duration-500 border-b-2 border-transparent hover:border-primary">
+<div class="aspect-[16/10] overflow-hidden relative">
+<img alt="Toyota Tacoma" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105" data-alt="Tactical white Toyota Tacoma TRD Pro with overland rack in a foggy evergreen forest landscape" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDViY4cvyoe1tCkwVyyDEz45DfxLOHuvi9z4GGZkb8Rc7VgAQ_u3vNv-6cbJawiUEClaPEIIQ8Bz3NW-EiCTWfvMQsQaMI0rkqt7700ty3EcphUsughqz53GInQzVk946cT52dnCYLKrjFIDJcRX4obzPsu3jZM93GZ9GZWsvZ2elWZCqWzQ4zEwqE5pJavDWNufKrccTWdpRqfpKlOY2kQyuDCqoM4R2SlQRClhBfNsXtfh-lxBrw6j2pkPaTWjB8JbojWcCY28Vc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
+<div class="absolute top-4 right-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-primary">Overland King</div>
+</div>
+<div class="p-8 space-y-4">
+<div class="flex justify-between items-start">
+<div>
+<h2 class="font-headline text-3xl font-bold uppercase tracking-tighter leading-tight">Toyota Tacoma</h2>
+<p class="text-on-surface-variant font-label text-sm uppercase tracking-wide">TRD Pro Hybrid</p>
+</div>
+<span class="font-headline font-black text-xl text-on-surface-variant">$52,100</span>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/10">
+<div>
+<span class="block text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Engine</span>
+<span class="font-headline font-bold text-lg">i-FORCE MAX</span>
+</div>
+<div>
+<span class="block text-[10px] text-on-surface-variant uppercase tracking-widest mb-1">Payload</span>
+<span class="font-headline font-bold text-lg">1,700 LBS</span>
+</div>
+</div>
+<button class="w-full py-4 bg-surface-container-high text-on-surface uppercase font-bold text-xs tracking-widest group-hover:bg-primary group-hover:text-on-primary transition-all duration-300 flex items-center justify-center gap-2">
+                            Select Frame <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Vehicle Card 4 (Placeholder) -->
+<div class="group relative bg-surface-container-low/50 overflow-hidden border border-dashed border-outline-variant/30 flex flex-col items-center justify-center p-12 text-center">
+<span class="material-symbols-outlined text-5xl text-outline-variant mb-4">commute</span>
+<h3 class="font-headline text-xl font-bold text-on-surface-variant">Custom Import?</h3>
+<p class="text-xs text-on-surface-variant/60 mt-2 font-label uppercase tracking-widest">Special order sourcing available</p>
+<button class="mt-6 text-primary text-xs font-bold uppercase tracking-[0.2em] hover:tracking-[0.3em] transition-all">Inquire with Vendor <span class="ml-1">→</span></button>
+</div>
+</div>
+</section>
+</main>
+<!-- Progress Tracker (Custom Design System Component) -->
+<div class="fixed bottom-0 left-0 right-0 h-1 bg-surface-container z-[60]">
+<div class="h-full bg-primary w-1/5 shadow-[0_0_10px_#ff5720]"></div>
+</div>
+<!-- Footer -->
+<footer class="bg-[#0e0e0e] flex flex-col md:flex-row justify-between items-center w-full px-12 py-16 gap-8 relative z-50">
+<div class="flex flex-col gap-2">
+<span class="text-lg font-bold text-white font-['Inter']">Rig Builder</span>
+<p class="text-gray-500 font-['Inter'] text-sm tracking-wide">© 2024 Rig Builder. Engineered for the Wild.</p>
+</div>
+<div class="flex gap-8 flex-wrap justify-center">
+<a class="text-gray-500 hover:text-[#FF551D] transition-colors font-['Inter'] text-sm tracking-wide" href="#">Vendor Partners</a>
+<a class="text-gray-500 hover:text-[#FF551D] transition-colors font-['Inter'] text-sm tracking-wide" href="#">Privacy Policy</a>
+<a class="text-gray-500 hover:text-[#FF551D] transition-colors font-['Inter'] text-sm tracking-wide" href="#">Terms of Service</a>
+<a class="text-gray-500 hover:text-[#FF551D] transition-colors font-['Inter'] text-sm tracking-wide" href="#">Installation Guides</a>
+</div>
+</footer>
+</body></html>
