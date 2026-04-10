@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rig Builder | My Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#303030",
+                        "surface-container-high": "#2a2a2a",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed-variant": "#862200",
+                        "surface-bright": "#393939",
+                        "surface-dim": "#131313",
+                        "secondary-container": "#464747",
+                        "tertiary": "#c6c6c6",
+                        "surface-container-low": "#1b1c1c",
+                        "on-background": "#e4e2e1",
+                        "surface-variant": "#353535",
+                        "surface": "#131313",
+                        "on-error": "#690005",
+                        "on-secondary-fixed-variant": "#464747",
+                        "outline-variant": "#5b4039",
+                        "inverse-surface": "#e4e2e1",
+                        "on-tertiary-container": "#282a2a",
+                        "secondary": "#c7c6c6",
+                        "outline": "#ab897f",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-primary": "#5f1600",
+                        "surface-container-highest": "#353535",
+                        "background": "#131313",
+                        "on-surface-variant": "#e5beb3",
+                        "on-secondary-container": "#b5b5b5",
+                        "on-surface": "#e4e2e1",
+                        "primary-container": "#ff5720",
+                        "primary": "#ffb59f",
+                        "surface-container": "#1f2020",
+                        "on-primary-container": "#531200"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .blueprint-grid {
+            background-image: linear-gradient(#1f2020 1px, transparent 1px), linear-gradient(90deg, #1f2020 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+<body class="bg-surface-dim text-on-surface font-body selection:bg-primary-container selection:text-white">
+<nav class="bg-[#0e0e0e] flex justify-between items-center w-full px-8 h-20 max-w-none sticky top-0 z-50">
+<div class="flex items-center gap-12">
+<a href="index.html" class="text-2xl font-black text-[#FF551D] tracking-tighter font-['Space_Grotesk']">Rig Builder</a>
+<div class="hidden md:flex gap-8">
+<a class="text-on-surface-variant hover:text-primary font-['Space_Grotesk'] uppercase tracking-wider font-bold text-sm" href="garage.html">Inventory</a>
+</div>
+</div>
+<div id="auth-nav-root" class="flex items-center gap-6" data-auth-variant="profile">
+<div class="flex gap-4 items-center">
+<a href="login.html" class="text-on-surface-variant hover:text-primary transition-colors" aria-label="Log in"><span class="material-symbols-outlined align-middle">person</span></a>
+</div>
+<a href="register.html" class="inline-flex items-center justify-center bg-gradient-to-r from-primary to-primary-container text-on-primary-container px-6 py-2 rounded-sm font-['Space_Grotesk'] uppercase font-bold tracking-widest text-sm hover:scale-95 duration-150 transition-transform">
+                REGISTER
+            </a>
+</div>
+</nav>
+<main id="profile-app" class="min-h-screen relative blueprint-grid px-6 md:px-12 py-12 md:py-16">
+<div class="max-w-4xl mx-auto">
+<div class="mb-10">
+<span class="font-label text-primary uppercase tracking-[0.3em] font-bold text-xs">Operator record</span>
+<h1 class="font-headline text-4xl md:text-5xl font-black uppercase tracking-tighter mt-2 text-white">My profile</h1>
+</div>
+<p id="profile-loading" class="text-on-surface-variant text-sm" aria-live="polite">Loading your profile…</p>
+<p id="profile-error" class="hidden text-error text-sm" aria-live="assertive"></p>
+<div id="profile-content" class="hidden space-y-10">
+<div id="profile-user"></div>
+<div id="profile-purchases"></div>
+</div>
+</div>
+</main>
+<footer class="bg-[#0e0e0e] flex flex-col md:flex-row justify-between items-center w-full px-12 py-16 gap-8 relative z-50 border-t border-[#1f2020]">
+<div class="flex flex-col gap-2">
+<span class="text-lg font-bold text-white font-['Inter']">Rig Builder</span>
+<p class="text-gray-500 font-['Inter'] text-sm tracking-wide">© 2024 Rig Builder. Engineered for the Wild.</p>
+</div>
+<div class="flex gap-8 flex-wrap justify-center">
+<a class="text-gray-500 hover:text-[#FF551D] transition-colors font-['Inter'] text-sm tracking-wide" href="garage.html">Inventory</a>
+<a class="text-gray-500 hover:text-[#FF551D] transition-colors font-['Inter'] text-sm tracking-wide" href="login.html">Sign in</a>
+</div>
+</footer>
+<script src="js/auth.js"></script>
+</body></html>

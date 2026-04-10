@@ -138,26 +138,26 @@
 <h2 class="font-headline text-4xl font-bold tracking-tight text-white mb-2">CREATE ACCOUNT</h2>
 <p class="text-on-secondary-container text-sm font-medium tracking-wide">ENTER YOUR OPERATOR CREDENTIALS</p>
 </div>
-<form class="space-y-8">
+<form class="space-y-8" id="register-form">
 <!-- Name Field -->
 <div class="input-accent group">
 <label class="block text-[10px] font-headline uppercase tracking-[0.2em] text-on-surface-variant mb-2 transition-colors group-focus-within:text-primary">Full Name</label>
-<input class="w-full bg-surface-container-highest border-none text-on-surface placeholder:text-surface-bright focus:ring-0 py-4 px-4 text-sm font-medium tracking-widest transition-all" placeholder="COMMANDER NAME" type="text"/>
+<input class="w-full bg-surface-container-highest border-none text-on-surface placeholder:text-surface-bright focus:ring-0 py-4 px-4 text-sm font-medium tracking-widest transition-all" id="register-full-name" placeholder="COMMANDER NAME" type="text"/>
 </div>
 <!-- Email Field -->
 <div class="input-accent group">
 <label class="block text-[10px] font-headline uppercase tracking-[0.2em] text-on-surface-variant mb-2 transition-colors group-focus-within:text-primary">Email Address</label>
-<input class="w-full bg-surface-container-highest border-none text-on-surface placeholder:text-surface-bright focus:ring-0 py-4 px-4 text-sm font-medium tracking-widest transition-all" placeholder="NAME@RIGBUILDER.PRO" type="email"/>
+<input class="w-full bg-surface-container-highest border-none text-on-surface placeholder:text-surface-bright focus:ring-0 py-4 px-4 text-sm font-medium tracking-widest transition-all" id="register-email" placeholder="NAME@RIGBUILDER.PRO" type="email"/>
 </div>
 <!-- Password Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 <div class="input-accent group">
 <label class="block text-[10px] font-headline uppercase tracking-[0.2em] text-on-surface-variant mb-2 transition-colors group-focus-within:text-primary">Password</label>
-<input class="w-full bg-surface-container-highest border-none text-on-surface placeholder:text-surface-bright focus:ring-0 py-4 px-4 text-sm font-medium tracking-widest transition-all" placeholder="••••••••" type="password"/>
+<input class="w-full bg-surface-container-highest border-none text-on-surface placeholder:text-surface-bright focus:ring-0 py-4 px-4 text-sm font-medium tracking-widest transition-all" id="register-password" placeholder="••••••••" type="password"/>
 </div>
 <div class="input-accent group">
 <label class="block text-[10px] font-headline uppercase tracking-[0.2em] text-on-surface-variant mb-2 transition-colors group-focus-within:text-primary">Confirm Password</label>
-<input class="w-full bg-surface-container-highest border-none text-on-surface placeholder:text-surface-bright focus:ring-0 py-4 px-4 text-sm font-medium tracking-widest transition-all" placeholder="••••••••" type="password"/>
+<input class="w-full bg-surface-container-highest border-none text-on-surface placeholder:text-surface-bright focus:ring-0 py-4 px-4 text-sm font-medium tracking-widest transition-all" id="register-confirm-password" placeholder="••••••••" type="password"/>
 </div>
 </div>
 <!-- Terms -->
@@ -168,7 +168,7 @@
                             <span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">arrow_forward</span>
 </button>
 <p class="text-xs font-medium text-on-secondary-container">
-                            ALREADY ENLISTED? <a class="text-primary hover:underline underline-offset-4 decoration-2" href="#">LOGIN</a>
+                            ALREADY ENLISTED? <a class="text-primary hover:underline underline-offset-4 decoration-2" href="login.html">LOGIN</a>
 </p>
 </div>
 </form>
@@ -198,4 +198,85 @@
             </div>
 </div>
 </footer>
+<script>
+    const registerForm = document.getElementById("register-form");
+    const registerFullName = document.getElementById("register-full-name");
+    const registerEmail = document.getElementById("register-email");
+    const registerPassword = document.getElementById("register-password");
+    const registerConfirmPassword = document.getElementById("register-confirm-password");
+
+    const registerButton = registerForm.querySelector('button[type="submit"]');
+    const registerDefaultButtonText = registerButton.textContent.trim();
+
+    const registerStatus = document.createElement("p");
+    registerStatus.className = "text-xs font-medium tracking-wide";
+    registerStatus.setAttribute("aria-live", "polite");
+    registerForm.appendChild(registerStatus);
+
+    function setRegisterStatus(message, isError) {
+        registerStatus.textContent = message;
+        registerStatus.className = isError
+            ? "text-xs font-medium tracking-wide text-error"
+            : "text-xs font-medium tracking-wide text-secondary";
+    }
+
+    function setRegisterLoading(isLoading) {
+        registerButton.disabled = isLoading;
+        registerButton.textContent = isLoading ? "Creating..." : registerDefaultButtonText;
+        registerButton.classList.toggle("opacity-70", isLoading);
+        registerButton.classList.toggle("cursor-not-allowed", isLoading);
+    }
+
+    registerForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const full_name = registerFullName.value.trim();
+        const email = registerEmail.value.trim();
+        const password = registerPassword.value;
+        const confirmPassword = registerConfirmPassword.value;
+
+        if (!email || !password) {
+            setRegisterStatus("Email and password are required.", true);
+            return;
+        }
+
+        if (confirmPassword && password !== confirmPassword) {
+            setRegisterStatus("Passwords do not match.", true);
+            return;
+        }
+
+        setRegisterStatus("", false);
+        setRegisterLoading(true);
+
+        try {
+            const response = await fetch("https://pqpzjgycchatzncfdjmj.functions.supabase.co/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    full_name
+                })
+            });
+
+            const result = await response.json().catch(() => ({}));
+
+            if (!response.ok || result.success === false) {
+                setRegisterStatus(result.error || "Registration failed.", true);
+                return;
+            }
+
+            setRegisterStatus("Registration successful. Redirecting to login...", false);
+            window.setTimeout(() => {
+                window.location.href = "login.html";
+            }, 900);
+        } catch (error) {
+            setRegisterStatus("Network error. Please try again.", true);
+        } finally {
+            setRegisterLoading(false);
+        }
+    });
+</script>
 </body></html>
