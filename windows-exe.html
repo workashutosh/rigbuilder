@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Windows build | Rig Builder</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@300;400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#303030",
+                    "surface-container-high": "#2a2a2a",
+                    "secondary-fixed-dim": "#c7c6c6",
+                    "on-primary-fixed-variant": "#862200",
+                    "error": "#ffb4ab",
+                    "on-primary-container": "#531200",
+                    "on-secondary": "#2f3131",
+                    "on-primary-fixed": "#3b0a00",
+                    "on-tertiary": "#2f3131",
+                    "inverse-primary": "#af3000",
+                    "error-container": "#93000a",
+                    "on-secondary-fixed": "#1a1c1c",
+                    "surface-bright": "#393939",
+                    "surface-dim": "#131313",
+                    "secondary-container": "#464747",
+                    "tertiary": "#c6c6c6",
+                    "surface-container-low": "#1b1c1c",
+                    "on-background": "#e4e2e1",
+                    "primary-fixed-dim": "#ffb59f",
+                    "surface-variant": "#353535",
+                    "surface": "#131313",
+                    "on-error": "#690005",
+                    "primary-fixed": "#ffdbd1",
+                    "on-secondary-fixed-variant": "#464747",
+                    "secondary-fixed": "#e3e2e2",
+                    "tertiary-fixed-dim": "#c6c6c6",
+                    "tertiary-container": "#909191",
+                    "on-error-container": "#ffdad6",
+                    "outline-variant": "#5b4039",
+                    "inverse-surface": "#e4e2e1",
+                    "tertiary-fixed": "#e2e2e2",
+                    "on-tertiary-container": "#282a2a",
+                    "secondary": "#c7c6c6",
+                    "surface-tint": "#ffb59f",
+                    "outline": "#ab897f",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "surface-container-lowest": "#0e0e0e",
+                    "on-primary": "#5f1600",
+                    "surface-container-highest": "#353535",
+                    "background": "#131313",
+                    "on-surface-variant": "#e56236",
+                    "on-secondary-container": "#b5b5b5",
+                    "on-surface": "#e4e2e1",
+                    "primary-container": "#ff5720",
+                    "primary": "#ffb59f"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Space Grotesk"],
+                    "body": ["Inter"],
+                    "label": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .kinetic-gradient {
+            background: linear-gradient(135deg, #ffb59f 0%, #ff5720 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface font-body selection:bg-primary-container selection:text-white">
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0e0e0e] flex justify-between items-center w-full px-8 h-20 max-w-none">
+<div class="flex items-center gap-12">
+<a href="index.html" class="text-2xl font-black text-[#FF551D] tracking-tighter font-headline">Rig Builder</a>
+<div class="hidden md:flex gap-8 items-center h-full">
+<a class="font-headline uppercase tracking-wider font-bold text-sm text-gray-400 hover:text-white transition-colors" href="garage.html">Inventory</a>
+</div>
+</div>
+<div id="auth-nav-root" class="flex items-center gap-6" data-auth-variant="index">
+<a href="register.html" class="hidden lg:inline-flex items-center justify-center kinetic-gradient text-on-primary-container font-headline font-bold uppercase tracking-widest text-xs py-3 px-6 rounded-sm active:scale-95 duration-150 transition-all">
+                Start Your Build
+            </a>
+<div class="flex gap-4 text-gray-400 items-center">
+<a href="login.html" class="text-gray-400 hover:text-white transition-all" aria-label="Log in"><span class="material-symbols-outlined">person</span></a>
+</div>
+</div>
+</nav>
+<main class="pt-20 min-h-[calc(100vh-5rem)] flex flex-col items-center justify-center px-6">
+<a href="https://drive.google.com/drive/folders/1BrMCGGC5homtoO6wwbcmnl379s7h4ug4?usp=sharing" class="inline-flex items-center justify-center kinetic-gradient text-on-primary-container px-10 py-5 font-headline font-bold uppercase tracking-widest rounded-sm active:scale-95 duration-150 transition-all">
+                GET Windows EXE
+            </a>
+<a href="index.html" class="mt-10 text-sm font-label uppercase tracking-widest text-on-secondary-container hover:text-primary-container transition-colors">Back to home</a>
+</main>
+<script src="js/auth.js"></script>
+</body></html>
