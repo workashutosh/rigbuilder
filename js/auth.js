@@ -1,6 +1,8 @@
 (function () {
   var GET_PROFILE =
     "https://pqpzjgycchatzncfdjmj.functions.supabase.co/get-profile";
+  var DISCARD_CHECKOUT =
+    "https://pqpzjgycchatzncfdjmj.functions.supabase.co/discard-checkout";
 
   function signOut() {
     localStorage.removeItem("access_token");
@@ -55,13 +57,76 @@
     }
   }
 
-  function formatMoney(amount) {
-    if (amount == null) return "—";
-    return new Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 2,
-    }).format(amount);
+  function showProfileToast(message) {
+    var toast = document.getElementById("profile-toast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.classList.remove("opacity-0", "translate-y-2", "pointer-events-none");
+    toast.classList.add("opacity-100", "translate-y-0");
+    clearTimeout(showProfileToast._t);
+    showProfileToast._t = setTimeout(function () {
+      toast.classList.add("opacity-0", "translate-y-2", "pointer-events-none");
+      toast.classList.remove("opacity-100", "translate-y-0");
+    }, 4000);
+  }
+
+  function hidePaymentSuccessModal() {
+    var modal = document.getElementById("payment-success-modal");
+    var panel = document.getElementById("payment-success-modal-panel");
+    if (!modal) return;
+    modal.setAttribute("aria-hidden", "true");
+    modal.classList.add("opacity-0", "pointer-events-none");
+    modal.classList.remove("opacity-100");
+    if (panel) {
+      panel.classList.add("scale-95");
+      panel.classList.remove("scale-100");
+    }
+    document.body.classList.remove("overflow-hidden");
+    if (hidePaymentSuccessModal._onKey) {
+      document.removeEventListener("keydown", hidePaymentSuccessModal._onKey);
+      hidePaymentSuccessModal._onKey = null;
+    }
+  }
+
+  function showPaymentSuccessModal() {
+    var modal = document.getElementById("payment-success-modal");
+    var panel = document.getElementById("payment-success-modal-panel");
+    if (!modal) {
+      showProfileToast(
+        "Payment completed (demo). No charge was processed and no funds were taken."
+      );
+      return;
+    }
+    modal.setAttribute("aria-hidden", "false");
+    modal.classList.remove("opacity-0", "pointer-events-none");
+    modal.classList.add("opacity-100");
+    if (panel) {
+      panel.classList.remove("scale-95");
+      panel.classList.add("scale-100");
+    }
+    document.body.classList.add("overflow-hidden");
+    hidePaymentSuccessModal._onKey = function (ev) {
+      if (ev.key === "Escape") hidePaymentSuccessModal();
+    };
+    document.addEventListener("keydown", hidePaymentSuccessModal._onKey);
+    requestAnimationFrame(function () {
+      var btn = document.getElementById("payment-success-dismiss");
+      if (btn && typeof btn.focus === "function") btn.focus();
+    });
+  }
+
+  function bindPaymentSuccessModal() {
+    var modal = document.getElementById("payment-success-modal");
+    if (!modal || modal.dataset.bound === "1") return;
+    modal.dataset.bound = "1";
+    modal.addEventListener("click", function (e) {
+      if (
+        e.target.closest("[data-payment-modal-backdrop]") ||
+        e.target.closest("[data-close-payment-modal]")
+      ) {
+        hidePaymentSuccessModal();
+      }
+    });
   }
 
   function escapeHtml(s) {
@@ -78,6 +143,289 @@
       escapeHtml(String(value)) +
       "</dd></div>"
     );
+  }
+
+  function buildUserCardHtml(user) {
+    return (
+      '<div class="rounded-sm border border-outline-variant/20 bg-surface-container p-6 space-y-4">' +
+      '<h2 class="font-headline text-sm font-bold uppercase tracking-tight text-primary">Account</h2>' +
+      '<dl class="grid grid-cols-1 gap-4 text-sm">' +
+      profileRow("Name", user.full_name || "—") +
+      profileRow("Email", user.email || "—") +
+      profileRow("Subscription", user.subscription_status || "—") +
+      profileRow("Trial ends", formatDate(user.trial_ends_at)) +
+      profileRow("Member since", formatDate(user.created_at)) +
+      "</dl></div>"
+    );
+  }
+
+  function productFromLine(line) {
+    if (!line || typeof line !== "object") return {};
+    var nested = line.products || line.product;
+    if (nested && typeof nested === "object") return nested;
+    return {};
+  }
+
+  /** Flat purchase rows use product_name on the line; nested products use .name */
+  function lineProductTitle(line, prod) {
+    return (
+      line.product_name ||
+      prod.name ||
+      line.name ||
+      "Line item"
+    );
+  }
+
+  function lineProductMetaHtml(line) {
+    var parts = [];
+    if (line.category_id)
+      parts.push(
+        '<div class="text-primary uppercase tracking-wider text-[10px] font-label">' +
+          escapeHtml(String(line.category_id)) +
+          "</div>"
+      );
+    if (line.variant_key)
+      parts.push(
+        '<div class="text-on-surface-variant text-xs font-mono break-all">' +
+          escapeHtml(String(line.variant_key)) +
+          "</div>"
+      );
+    if (line.stripe_session_id)
+      parts.push(
+        '<div class="text-on-surface-variant/80 text-[10px] uppercase tracking-wider font-label">Ref ' +
+          escapeHtml(String(line.stripe_session_id)) +
+          "</div>"
+      );
+    var nested = productFromLine(line);
+    var desc = nested.description || line.description;
+    if (desc) {
+      var short = desc.length > 160 ? desc.slice(0, 157) + "…" : desc;
+      parts.push(
+        '<span class="block text-xs text-on-surface-variant mt-2 leading-relaxed whitespace-pre-wrap">' +
+          escapeHtml(short) +
+          "</span>"
+      );
+    }
+    if (!parts.length) return "";
+    return '<div class="mt-2 space-y-1">' + parts.join("") + "</div>";
+  }
+
+  /** Server often returns the active bucket as `purchases`; dedicated checkout keys may be empty. */
+  function resolveCheckoutItems(data) {
+    var raw =
+      data.checkout_items ||
+      data.checkout ||
+      data.cart_items ||
+      data.pending_checkout ||
+      [];
+    if (!Array.isArray(raw)) raw = [];
+    var purchases = Array.isArray(data.purchases) ? data.purchases : [];
+    if (raw.length) return raw;
+    return purchases;
+  }
+
+  function lineQuantity(line) {
+    var q = line.quantity != null ? line.quantity : line.qty;
+    if (q == null || q === "") return 1;
+    var n = Number(q);
+    return isFinite(n) && n >= 0 ? n : 1;
+  }
+
+  /** Plain number for display — grouping only, no currency symbol or code. */
+  function formatPlainAmount(n) {
+    if (n == null || n === "") return "—";
+    var num = Number(n);
+    if (!isFinite(num)) return "—";
+    return new Intl.NumberFormat(undefined, {
+      maximumFractionDigits: 2,
+      useGrouping: true,
+    }).format(num);
+  }
+
+  function lineLineTotal(line) {
+    if (line.total_amount != null) return Number(line.total_amount);
+    if (line.amount != null) return Number(line.amount);
+    return NaN;
+  }
+
+  function lineUnitAmount(line) {
+    if (line.unit_price != null) return Number(line.unit_price);
+    var total = lineLineTotal(line);
+    var q = lineQuantity(line);
+    if (isFinite(total) && q > 0) return total / q;
+    return NaN;
+  }
+
+  function buildCheckoutTableHtml(checkoutItems) {
+    var unitSum = 0;
+    var amountSum = 0;
+    checkoutItems.forEach(function (line) {
+      unitSum += lineQuantity(line);
+      var lt = lineLineTotal(line);
+      if (isFinite(lt)) amountSum += lt;
+    });
+    var lineCount = checkoutItems.length;
+
+    var empty =
+      '<div class="flex flex-col items-center justify-center py-16 px-6 text-center border border-dashed border-outline-variant/30 rounded-sm bg-surface-container-low/30">' +
+      '<span class="material-symbols-outlined text-5xl text-outline-variant mb-3">shopping_cart</span>' +
+      '<p class="font-headline font-bold text-on-surface-variant">Bucket is empty</p>' +
+      '<p class="text-xs text-on-surface-variant/70 mt-2 font-label uppercase tracking-widest max-w-sm">Nothing in checkout yet.</p>' +
+      "</div>";
+
+    if (!lineCount) {
+      return { inner: empty, lineCount: 0, unitSum: 0, amountSum: 0 };
+    }
+
+    var header =
+      '<div class="grid grid-cols-12 gap-3 px-4 py-3 bg-surface-container border-b border-outline-variant/20 text-[10px] font-label uppercase tracking-widest text-on-surface-variant min-w-[960px]">' +
+      '<div class="col-span-12 sm:col-span-3">Product / detail</div>' +
+      '<div class="col-span-4 sm:col-span-2">SKU</div>' +
+      '<div class="col-span-4 sm:col-span-1">Qty</div>' +
+      '<div class="col-span-4 sm:col-span-2 text-right sm:text-left">Unit</div>' +
+      '<div class="col-span-6 sm:col-span-2 text-right sm:text-left">Line total</div>' +
+      '<div class="col-span-6 sm:col-span-2">Recorded</div>' +
+      "</div>";
+
+    var rows = checkoutItems
+      .map(function (line) {
+        var prod = productFromLine(line);
+        var title = lineProductTitle(line, prod);
+        var sku = String(line.sku || prod.sku || "—");
+        var qty = lineQuantity(line);
+        var when = formatDate(line.created_at || line.added_at);
+        var status = line.status || line.state || "";
+        var statusBit = status
+          ? '<span class="text-[10px] uppercase tracking-wider text-primary mt-1 block">' +
+            escapeHtml(status) +
+            "</span>"
+          : "";
+        var meta = lineProductMetaHtml(line);
+        var unitAmt = lineUnitAmount(line);
+        var lineTot = lineLineTotal(line);
+        return (
+          '<div class="grid grid-cols-12 gap-3 px-4 py-4 border-t border-outline-variant/10 items-start hover:bg-surface-container-low/40 transition-colors min-w-[960px]">' +
+          '<div class="col-span-12 sm:col-span-3 min-w-0">' +
+          '<p class="font-headline font-bold text-white leading-snug">' +
+          escapeHtml(title) +
+          "</p>" +
+          statusBit +
+          meta +
+          "</div>" +
+          '<div class="col-span-4 sm:col-span-2 font-mono text-sm text-on-surface-variant break-all">' +
+          escapeHtml(sku) +
+          "</div>" +
+          '<div class="col-span-4 sm:col-span-1 font-headline font-bold text-lg text-white">' +
+          escapeHtml(String(qty)) +
+          "</div>" +
+          '<div class="col-span-4 sm:col-span-2 font-headline font-bold text-white tabular-nums">' +
+          escapeHtml(formatPlainAmount(unitAmt)) +
+          "</div>" +
+          '<div class="col-span-6 sm:col-span-2 font-headline font-bold text-primary tabular-nums">' +
+          escapeHtml(formatPlainAmount(lineTot)) +
+          "</div>" +
+          '<div class="col-span-6 sm:col-span-2 text-xs text-on-surface-variant">' +
+          escapeHtml(when) +
+          "</div>" +
+          "</div>"
+        );
+      })
+      .join("");
+
+    var totals =
+      '<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-4 bg-surface-container border-t border-primary-container/30 min-w-[960px]">' +
+      '<div class="flex flex-wrap gap-x-10 gap-y-2">' +
+      '<div><p class="text-on-surface-variant uppercase tracking-widest text-[10px] font-label mb-0.5">Total lines</p><p class="font-headline font-bold text-2xl text-white">' +
+      lineCount +
+      "</p></div>" +
+      '<div><p class="text-on-surface-variant uppercase tracking-widest text-[10px] font-label mb-0.5">Total units</p><p class="font-headline font-bold text-2xl text-white">' +
+      unitSum +
+      "</p></div>" +
+      '<div><p class="text-on-surface-variant uppercase tracking-widest text-[10px] font-label mb-0.5">Total amount</p><p class="font-headline font-bold text-2xl text-primary tabular-nums">' +
+      formatPlainAmount(amountSum) +
+      "</p></div>" +
+      "</div>" +
+      '<p class="text-xs text-on-surface-variant max-w-md leading-relaxed">Amounts are numeric only (no currency symbol). Line total uses total_amount, or amount if needed.</p>' +
+      "</div>";
+
+    return {
+      inner:
+        '<div class="overflow-x-auto rounded-sm border border-outline-variant/20 bg-surface-container-low">' +
+        '<div class="inline-block min-w-full align-middle">' +
+        header +
+        rows +
+        totals +
+        "</div></div>",
+      lineCount: lineCount,
+      unitSum: unitSum,
+      amountSum: amountSum,
+    };
+  }
+
+  function bindProfileCheckoutActions() {
+    var root = document.getElementById("profile-app");
+    if (!root || root.dataset.checkoutBound === "1") return;
+    root.dataset.checkoutBound = "1";
+    root.addEventListener("click", function (e) {
+      var checkoutBtn = e.target.closest("[data-checkout-demo]");
+      var completeBtn = e.target.closest("[data-complete-payment-demo]");
+      var discardBtn = e.target.closest("[data-discard-checkout]");
+      if (checkoutBtn && !checkoutBtn.disabled) {
+        e.preventDefault();
+        showProfileToast(
+          "Checkout (demo). In production this step would continue to payment."
+        );
+        return;
+      }
+      if (completeBtn && !completeBtn.disabled) {
+        e.preventDefault();
+        showPaymentSuccessModal();
+        return;
+      }
+      if (discardBtn) {
+        e.preventDefault();
+        var token = localStorage.getItem("access_token");
+        if (!token) {
+          signOut();
+          return;
+        }
+        discardBtn.disabled = true;
+        fetch(DISCARD_CHECKOUT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: "{}",
+        })
+          .then(function (r) {
+            return r.json().then(function (data) {
+              return { ok: r.ok, data: data };
+            });
+          })
+          .then(function (result) {
+            discardBtn.disabled = false;
+            var d = result.data || {};
+            if (result.ok && d.success !== false) {
+              var msg =
+                (d.message || "Checkout discarded.") +
+                (d.deleted_count != null
+                  ? " Removed " + d.deleted_count + " row(s)."
+                  : "");
+              showProfileToast(msg);
+              loadProfilePage();
+            } else {
+              showProfileToast(
+                (d && d.message) || "Could not discard checkout. Try again."
+              );
+            }
+          })
+          .catch(function () {
+            discardBtn.disabled = false;
+            showProfileToast("Network error while discarding checkout.");
+          });
+      }
+    });
   }
 
   async function loadProfilePage() {
@@ -111,70 +459,58 @@
       if (errEl) errEl.classList.add("hidden");
       if (content) content.classList.remove("hidden");
 
+      bindProfileCheckoutActions();
+
       var user = data.user || {};
-      var userSection = document.getElementById("profile-user");
-      if (userSection) {
-        userSection.innerHTML =
-          '<div class="rounded-sm border border-outline-variant/20 bg-surface-container p-8 space-y-4">' +
-          '<h2 class="font-headline text-xl font-bold uppercase tracking-tight text-white">Account</h2>' +
-          '<dl class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">' +
-          profileRow("Name", user.full_name || "—") +
-          profileRow("Email", user.email || "—") +
-          profileRow("Subscription", user.subscription_status || "—") +
-          profileRow("Trial ends", formatDate(user.trial_ends_at)) +
-          profileRow("Member since", formatDate(user.created_at)) +
-          "</dl></div>";
+      var userCard = buildUserCardHtml(user);
+      var sidebarUser = document.getElementById("profile-sidebar-user");
+      if (sidebarUser) sidebarUser.innerHTML = userCard;
+      var mobileUser = document.getElementById("profile-mobile-user");
+      if (mobileUser) mobileUser.innerHTML = userCard;
+
+      var checkoutItems = resolveCheckoutItems(data);
+
+      var table = buildCheckoutTableHtml(checkoutItems);
+      var hasLines = table.lineCount > 0;
+      var disabledPrimary = hasLines ? "" : " disabled";
+
+      var actionsEl = document.getElementById("profile-checkout-actions");
+      if (actionsEl) {
+        actionsEl.innerHTML =
+          '<button type="button" data-checkout-demo' +
+          disabledPrimary +
+          ' class="inline-flex items-center justify-center py-4 px-8 bg-gradient-to-r from-primary to-primary-container text-on-primary-container uppercase font-bold text-xs tracking-widest hover:opacity-90 transition-opacity duration-200 gap-2 rounded-sm disabled:opacity-40 disabled:pointer-events-none disabled:cursor-not-allowed">' +
+          '<span class="material-symbols-outlined text-sm">shopping_cart_checkout</span> Checkout' +
+          "</button>" +
+          '<button type="button" data-complete-payment-demo' +
+          disabledPrimary +
+          ' class="inline-flex items-center justify-center py-4 px-8 bg-surface-container-high text-on-surface uppercase font-bold text-xs tracking-widest hover:bg-primary hover:text-on-primary transition-all duration-300 gap-2 rounded-sm disabled:opacity-40 disabled:pointer-events-none disabled:cursor-not-allowed">' +
+          '<span class="material-symbols-outlined text-sm">payments</span> Complete payment (demo)' +
+          "</button>" +
+          '<button type="button" data-discard-checkout class="inline-flex items-center justify-center py-4 px-8 border border-outline-variant/40 text-on-surface-variant uppercase font-bold text-xs tracking-widest hover:border-primary hover:text-primary transition-all duration-300 gap-2 rounded-sm">' +
+          '<span class="material-symbols-outlined text-sm">delete_sweep</span> Discard checkout' +
+          "</button>";
       }
 
-      var purchases = data.purchases || [];
-      var purchasesEl = document.getElementById("profile-purchases");
-      if (purchasesEl) {
-        var total =
-          data.total_purchases != null
-            ? data.total_purchases
-            : purchases.length;
-        var cards = purchases
-          .map(function (p) {
-            var prod = p.products || {};
-            var desc = prod.description
-              ? '<p class="text-sm text-on-surface-variant mt-3 line-clamp-3">' +
-                escapeHtml(prod.description) +
-                "</p>"
-              : "";
-            return (
-              '<div class="border border-outline-variant/20 bg-surface-container-highest p-6 rounded-sm">' +
-              '<div class="flex flex-col md:flex-row md:justify-between md:items-start gap-2">' +
-              "<div>" +
-              '<p class="font-headline font-bold text-white">' +
-              escapeHtml(prod.name || "Purchase") +
-              "</p>" +
-              '<p class="text-xs text-on-surface-variant mt-1">' +
-              formatDate(p.created_at) +
-              "</p></div>" +
-              '<div class="text-left md:text-right">' +
-              '<p class="font-headline font-bold text-primary">' +
-              formatMoney(p.amount) +
-              "</p>" +
-              (prod.price != null
-                ? '<p class="text-xs text-on-surface-variant">Item ' +
-                  formatMoney(prod.price) +
-                  "</p>"
-                : "") +
-              "</div></div>" +
-              desc +
-              "</div>"
-            );
-          })
-          .join("");
-
-        purchasesEl.innerHTML =
-          '<h2 class="font-headline text-xl font-bold uppercase tracking-tight text-white mb-4">Purchases (' +
-          total +
-          ")</h2>" +
-          '<div class="space-y-4">' +
-          (cards ||
-            '<p class="text-on-surface-variant text-sm">No purchases yet.</p>') +
-          "</div>";
+      var checkoutEl = document.getElementById("profile-checkout");
+      if (checkoutEl) {
+        checkoutEl.innerHTML =
+          '<div class="mb-6 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">' +
+          '<div class="flex items-center gap-4">' +
+          '<span class="h-[1px] w-12 bg-primary shrink-0"></span>' +
+          '<h2 class="font-headline text-xl font-bold uppercase tracking-tight text-white">Checkout bucket</h2>' +
+          "</div>" +
+          (hasLines
+            ? '<p class="text-xs text-on-surface-variant font-label uppercase tracking-widest">' +
+              table.lineCount +
+              " line(s) · " +
+              table.unitSum +
+              " unit(s) · " +
+              formatPlainAmount(table.amountSum) +
+              " total</p>"
+            : "") +
+          "</div>" +
+          table.inner;
       }
     } catch (e) {
       if (loading) loading.classList.add("hidden");
@@ -194,6 +530,7 @@
     }
 
     if (document.getElementById("profile-app")) {
+      bindPaymentSuccessModal();
       loadProfilePage();
     }
   });

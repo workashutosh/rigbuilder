@@ -4,6 +4,15 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Rig Builder | My Profile</title>
+<script>
+(function () {
+  try {
+    if (!localStorage.getItem("access_token")) {
+      window.location.replace("login.html");
+    }
+  } catch (e) {}
+})();
+</script>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
@@ -67,14 +76,22 @@
             background-image: linear-gradient(#1f2020 1px, transparent 1px), linear-gradient(90deg, #1f2020 1px, transparent 1px);
             background-size: 40px 40px;
         }
+        #profile-toast {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
     </style>
 </head>
 <body class="bg-surface-dim text-on-surface font-body selection:bg-primary-container selection:text-white">
+<!--
+  Inventory UI design reference (match this page’s layout and visual language):
+  Path from project root: garage.html
+  Same directory as this file: ./garage.html
+-->
 <nav class="bg-[#0e0e0e] flex justify-between items-center w-full px-8 h-20 max-w-none sticky top-0 z-50">
 <div class="flex items-center gap-12">
 <a href="index.html" class="text-2xl font-black text-[#FF551D] tracking-tighter font-['Space_Grotesk']">Rig Builder</a>
 <div class="hidden md:flex gap-8">
-<a class="text-on-surface-variant hover:text-primary font-['Space_Grotesk'] uppercase tracking-wider font-bold text-sm" href="garage.html">Inventory</a>
+<a class="text-on-surface-variant hover:text-primary font-['Space_Grotesk'] uppercase tracking-wider font-bold text-sm pb-1" href="garage.html">Inventory</a>
 </div>
 </div>
 <div id="auth-nav-root" class="flex items-center gap-6" data-auth-variant="profile">
@@ -86,20 +103,42 @@
             </a>
 </div>
 </nav>
-<main id="profile-app" class="min-h-screen relative blueprint-grid px-6 md:px-12 py-12 md:py-16">
-<div class="max-w-4xl mx-auto">
-<div class="mb-10">
-<span class="font-label text-primary uppercase tracking-[0.3em] font-bold text-xs">Operator record</span>
-<h1 class="font-headline text-4xl md:text-5xl font-black uppercase tracking-tighter mt-2 text-white">My profile</h1>
+<main id="profile-app" class="flex min-h-screen relative blueprint-grid">
+<aside class="w-80 bg-surface-container-lowest border-r border-outline-variant/10 p-8 hidden lg:block sticky top-20 h-[calc(100vh-5rem)]">
+<h3 class="font-headline font-bold text-xl uppercase tracking-tighter mb-8 text-on-surface">Operator</h3>
+<div id="profile-sidebar-user" class="space-y-6">
+<p class="text-on-surface-variant text-sm">Loading…</p>
 </div>
+<div class="mt-10 pt-10 border-t border-outline-variant/10 space-y-3">
+<p class="font-label text-xs uppercase tracking-widest text-on-surface-variant">Checkout</p>
+<p class="text-xs text-on-surface-variant leading-relaxed">Discard sends a request to clear your server-side checkout bucket. Complete payment is a local demo only.</p>
+</div>
+</aside>
+<section class="flex-1 p-8 md:p-16">
+<div class="mb-16">
+<div class="flex items-center gap-4 mb-4">
+<span class="h-[1px] w-12 bg-primary"></span>
+<span class="font-label text-primary uppercase tracking-[0.3em] font-bold text-xs">Profile / Checkout</span>
+</div>
+<h1 class="font-headline text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none mb-4 italic text-white">
+                    YOUR <span class="text-transparent bg-clip-text bg-gradient-to-br from-primary to-primary-container">RIG &amp; ORDER</span>
+</h1>
+<p class="max-w-2xl text-on-surface-variant text-lg font-light leading-relaxed">
+                    Review line items, clear the checkout bucket on the server, or run a demo completion flow. Amounts are not shown as money on this screen.
+                </p>
+</div>
+<div id="profile-mobile-user" class="lg:hidden mb-10"></div>
 <p id="profile-loading" class="text-on-surface-variant text-sm" aria-live="polite">Loading your profile…</p>
 <p id="profile-error" class="hidden text-error text-sm" aria-live="assertive"></p>
 <div id="profile-content" class="hidden space-y-10">
-<div id="profile-user"></div>
-<div id="profile-purchases"></div>
+<div id="profile-checkout-actions" class="flex flex-col sm:flex-row flex-wrap gap-4 items-stretch sm:items-center"></div>
+<div id="profile-checkout" class="space-y-4"></div>
 </div>
-</div>
+</section>
 </main>
+<div class="fixed bottom-0 left-0 right-0 h-1 bg-surface-container z-[60]">
+<div class="h-full bg-primary w-2/5 shadow-[0_0_10px_#ff5720]"></div>
+</div>
 <footer class="bg-[#0e0e0e] flex flex-col md:flex-row justify-between items-center w-full px-12 py-16 gap-8 relative z-50 border-t border-[#1f2020]">
 <div class="flex flex-col gap-2">
 <span class="text-lg font-bold text-white font-['Inter']">Rig Builder</span>
@@ -110,5 +149,20 @@
 <a class="text-gray-500 hover:text-[#FF551D] transition-colors font-['Inter'] text-sm tracking-wide" href="login.html">Sign in</a>
 </div>
 </footer>
+<div id="profile-toast" class="fixed bottom-8 left-1/2 z-[70] max-w-md w-[calc(100%-2rem)] -translate-x-1/2 translate-y-2 opacity-0 pointer-events-none px-5 py-4 rounded-sm bg-surface-container-highest border border-primary-container/40 text-on-surface text-sm font-body text-center shadow-lg shadow-black/40" role="status" aria-live="polite"></div>
+<div id="payment-success-modal" class="fixed inset-0 z-[80] flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300 ease-out" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="payment-success-title">
+<div class="absolute inset-0 bg-black/75 backdrop-blur-sm" data-payment-modal-backdrop tabindex="-1"></div>
+<div id="payment-success-modal-panel" class="relative z-10 w-full max-w-md scale-95 rounded-sm border border-primary-container/35 bg-surface-container-highest shadow-2xl shadow-black/60 transition-transform duration-300 ease-out overflow-hidden">
+<div class="h-1 w-full bg-gradient-to-r from-primary to-primary-container"></div>
+<div class="px-8 pt-10 pb-8 md:px-10 md:pt-12 md:pb-10 text-center">
+<div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-primary-container/15 ring-2 ring-primary-container/40">
+<span class="material-symbols-outlined text-4xl text-primary" aria-hidden="true">check_circle</span>
+</div>
+<p id="payment-success-title" class="font-headline text-2xl md:text-3xl font-black uppercase tracking-tight text-white">Payment complete</p>
+<p class="mt-3 text-sm text-on-surface-variant leading-relaxed">Your demo checkout finished successfully. No payment was processed and no funds were charged.</p>
+<button type="button" id="payment-success-dismiss" data-close-payment-modal class="mt-8 w-full sm:w-auto min-w-[200px] inline-flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-primary-container text-on-primary-container font-headline font-bold uppercase tracking-widest text-xs py-4 px-10 rounded-sm hover:opacity-95 transition-opacity focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-container-highest">Got it</button>
+</div>
+</div>
+</div>
 <script src="js/auth.js"></script>
 </body></html>
