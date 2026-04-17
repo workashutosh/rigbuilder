@@ -3,6 +3,7 @@
     "https://pqpzjgycchatzncfdjmj.functions.supabase.co/get-profile";
   var DISCARD_CHECKOUT =
     "https://pqpzjgycchatzncfdjmj.functions.supabase.co/discard-checkout";
+  var DEFAULT_STRIPE_PUBLISHABLE_KEY = "pk_test_REPLACE_WITH_YOUR_KEY";
 
   function signOut() {
     localStorage.removeItem("access_token");
@@ -256,6 +257,61 @@
     return NaN;
   }
 
+  function resolveCheckoutSessionId(checkoutItems) {
+    if (!Array.isArray(checkoutItems)) return "";
+    for (var i = 0; i < checkoutItems.length; i += 1) {
+      var line = checkoutItems[i] || {};
+      var sessionId =
+        line.stripe_session_id ||
+        line.checkout_session_id ||
+        line.session_id ||
+        "";
+      if (sessionId) return String(sessionId);
+    }
+    return "";
+  }
+
+  function createStripeClient() {
+    if (typeof window === "undefined" || typeof window.Stripe !== "function") {
+      return { error: "Stripe.js did not load. Check your network and try again." };
+    }
+    var key =
+      (window.STRIPE_PUBLISHABLE_KEY || DEFAULT_STRIPE_PUBLISHABLE_KEY || "").trim();
+    if (!key || key === DEFAULT_STRIPE_PUBLISHABLE_KEY) {
+      return { error: "Add your Stripe publishable key in profile.html first." };
+    }
+    try {
+      return { stripe: window.Stripe(key) };
+    } catch (e) {
+      return { error: "Invalid Stripe publishable key configuration." };
+    }
+  }
+
+  async function launchStripeCheckout(sessionId, buttonEl) {
+    if (!sessionId) {
+      showProfileToast("No Stripe session found for this checkout yet.");
+      return;
+    }
+    var stripeResult = createStripeClient();
+    if (stripeResult.error) {
+      showProfileToast(stripeResult.error);
+      return;
+    }
+    if (buttonEl) buttonEl.disabled = true;
+    try {
+      var result = await stripeResult.stripe.redirectToCheckout({
+        sessionId: sessionId,
+      });
+      if (result && result.error && result.error.message) {
+        showProfileToast(result.error.message);
+      }
+    } catch (e) {
+      showProfileToast("Could not start Stripe Checkout. Please try again.");
+    } finally {
+      if (buttonEl) buttonEl.disabled = false;
+    }
+  }
+
   function buildCheckoutTableHtml(checkoutItems) {
     var unitSum = 0;
     var amountSum = 0;
@@ -372,9 +428,8 @@
       var discardBtn = e.target.closest("[data-discard-checkout]");
       if (checkoutBtn && !checkoutBtn.disabled) {
         e.preventDefault();
-        showProfileToast(
-          "Checkout (demo). In production this step would continue to payment."
-        );
+        var sessionId = checkoutBtn.getAttribute("data-stripe-session-id") || "";
+        launchStripeCheckout(sessionId, checkoutBtn);
         return;
       }
       if (completeBtn && !completeBtn.disabled) {
@@ -476,11 +531,17 @@
 
       var actionsEl = document.getElementById("profile-checkout-actions");
       if (actionsEl) {
+        var stripeSessionId = resolveCheckoutSessionId(checkoutItems);
+        var stripeDisabled = stripeSessionId ? "" : " disabled";
         actionsEl.innerHTML =
           '<button type="button" data-checkout-demo' +
           disabledPrimary +
+          stripeDisabled +
+          ' data-stripe-session-id="' +
+          escapeHtml(stripeSessionId) +
+          '"' +
           ' class="inline-flex items-center justify-center py-4 px-8 bg-gradient-to-r from-primary to-primary-container text-on-primary-container uppercase font-bold text-xs tracking-widest hover:opacity-90 transition-opacity duration-200 gap-2 rounded-sm disabled:opacity-40 disabled:pointer-events-none disabled:cursor-not-allowed">' +
-          '<span class="material-symbols-outlined text-sm">shopping_cart_checkout</span> Checkout' +
+          '<span class="material-symbols-outlined text-sm">shopping_cart_checkout</span> Stripe checkout' +
           "</button>" +
           '<button type="button" data-complete-payment-demo' +
           disabledPrimary +
@@ -489,7 +550,10 @@
           "</button>" +
           '<button type="button" data-discard-checkout class="inline-flex items-center justify-center py-4 px-8 border border-outline-variant/40 text-on-surface-variant uppercase font-bold text-xs tracking-widest hover:border-primary hover:text-primary transition-all duration-300 gap-2 rounded-sm">' +
           '<span class="material-symbols-outlined text-sm">delete_sweep</span> Discard checkout' +
-          "</button>";
+          "</button>" +
+          (!stripeSessionId && hasLines
+            ? '<p class="w-full text-xs text-on-surface-variant">Stripe session missing for these items. Create a Checkout Session on your backend and include <code class="font-mono">stripe_session_id</code>.</p>'
+            : "");
       }
 
       var checkoutEl = document.getElementById("profile-checkout");

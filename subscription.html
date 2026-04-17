@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rig Builder | Subscription</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    window.STRIPE_PUBLISHABLE_KEY = "pk_test_REPLACE_WITH_YOUR_KEY";
+    window.STRIPE_MONTHLY_PRICE_ID = "price_REPLACE_WITH_MONTHLY_PLAN_ID";
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-dim": "#131313",
+            "surface-container": "#1f2020",
+            "surface-container-highest": "#353535",
+            "outline-variant": "#5b4039",
+            "on-surface": "#e4e2e1",
+            "on-surface-variant": "#c7c6c6",
+            "primary": "#ffb59f",
+            "primary-container": "#ff5720",
+            "on-primary-container": "#531200",
+            "error": "#ffb4ab"
+          },
+          fontFamily: {
+            headline: ["Space Grotesk"],
+            body: ["Inter"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+  </style>
+</head>
+<body class="bg-surface-dim text-on-surface font-body selection:bg-primary-container selection:text-white min-h-screen">
+  <nav class="bg-[#0e0e0e] flex justify-between items-center w-full px-8 h-20 border-b border-[#1f2020]">
+    <div class="flex items-center gap-8">
+      <!-- <a href="index.html" class="text-2xl font-black text-[#FF551D] tracking-tighter font-headline">Rig Builder</a> -->
+      <a href="profile.html" class="hidden md:inline-flex text-on-surface-variant hover:text-primary uppercase tracking-wider font-bold text-xs">Profile</a>
+    </div>
+    <!-- <a href="garage.html" class="inline-flex items-center justify-center border border-outline-variant/40 text-on-surface-variant uppercase font-bold text-xs tracking-widest py-3 px-5 rounded-sm hover:border-primary hover:text-primary transition-colors">Inventory</a> -->
+  </nav>
+
+  <main class="px-6 sm:px-8 md:px-12 py-14 md:py-20">
+    <div class="max-w-4xl mx-auto">
+      <div class="mb-10">
+        <div class="flex items-center gap-4 mb-3">
+          <span class="h-[1px] w-12 bg-primary"></span>
+          <span class="font-headline text-primary uppercase tracking-[0.3em] font-bold text-xs">Subscription</span>
+        </div>
+        <h1 class="font-headline text-4xl md:text-6xl font-black uppercase tracking-tight leading-none italic text-white">
+          Rig Builder <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-container">Pro Plan</span>
+        </h1>
+        <p class="mt-4 text-on-surface-variant max-w-2xl">
+          Unlock monthly access for custom build workflows, saved setups, and priority updates.
+        </p>
+      </div>
+
+      <section class="rounded-sm border border-outline-variant/30 bg-surface-container p-8 md:p-10">
+        <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
+          <div>
+            <p class="font-headline font-bold uppercase tracking-widest text-xs text-primary">Monthly plan</p>
+            <p class="mt-3 font-headline text-5xl md:text-6xl font-black text-white">
+              $88<span class="text-xl md:text-2xl text-on-surface-variant font-bold">/month</span>
+            </p>
+            <p class="mt-4 text-sm text-on-surface-variant max-w-md">
+              Cancel anytime. Billing and card details are handled by Stripe checkout.
+            </p>
+          </div>
+          <ul class="space-y-3 text-sm text-on-surface-variant">
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary text-base">check</span>Unlimited build sessions</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary text-base">check</span>Saved rig presets and profile sync</li>
+            <li class="flex items-start gap-2"><span class="material-symbols-outlined text-primary text-base">check</span>Priority feature access</li>
+          </ul>
+        </div>
+
+        <div class="mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          <button id="subscribe-btn" type="button" class="inline-flex items-center justify-center py-4 px-8 bg-gradient-to-r from-primary to-primary-container text-on-primary-container uppercase font-bold text-xs tracking-widest hover:opacity-90 transition-opacity duration-200 gap-2 rounded-sm">
+            <span class="material-symbols-outlined text-sm">payments</span>
+            Subscribe now
+          </button>
+          <p id="subscribe-hint" class="text-xs text-on-surface-variant">Use your Stripe publishable key and monthly price id to enable checkout.</p>
+        </div>
+        <div id="plan-status" class="mt-4">
+          <p class="text-xs text-on-surface-variant">Checking your plan status…</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="subscription-toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 translate-y-2 opacity-0 pointer-events-none px-5 py-3 rounded-sm bg-surface-container-highest border border-primary-container/40 text-on-surface text-sm text-center shadow-lg shadow-black/40 transition-all"></div>
+
+  <script>
+    (function () {
+      var DEFAULT_KEY = "pk_test_REPLACE_WITH_YOUR_KEY";
+      var DEFAULT_PRICE = "price_REPLACE_WITH_MONTHLY_PLAN_ID";
+      var VERIFY_TOKEN_ENDPOINT =
+        "https://pqpzjgycchatzncfdjmj.functions.supabase.co/verify-token";
+
+      function formatDate(iso) {
+        if (!iso) return "—";
+        try {
+          return new Date(iso).toLocaleString(undefined, {
+            dateStyle: "medium",
+            timeStyle: "short"
+          });
+        } catch (e) {
+          return iso;
+        }
+      }
+
+      function renderPlanStatus(payload, source) {
+        var statusRoot = document.getElementById("plan-status");
+        var hint = document.getElementById("subscribe-hint");
+        var button = document.getElementById("subscribe-btn");
+        if (!statusRoot) return;
+
+        if (!payload) {
+          statusRoot.innerHTML =
+            '<p class="text-xs text-on-surface-variant">Sign in to check your current plan status.</p>';
+          if (hint) {
+            hint.textContent =
+              "Use your Stripe publishable key and monthly price id to enable checkout.";
+          }
+          return;
+        }
+
+        var status = payload.subscription_status || "unknown";
+        var trialActive = payload.is_trial_active === true;
+        var trialEnds = payload.trial_ends_at ? formatDate(payload.trial_ends_at) : "—";
+
+        statusRoot.innerHTML =
+          '<div class="rounded-sm border border-outline-variant/30 bg-surface-dim p-4">' +
+          '<p class="font-headline text-[10px] uppercase tracking-widest text-primary">Live status (' +
+          source +
+          ")</p>" +
+          '<div class="mt-2 grid sm:grid-cols-3 gap-3 text-sm">' +
+          '<div><p class="text-on-surface-variant text-[10px] uppercase tracking-widest">Subscription</p><p class="font-bold text-white">' +
+          status +
+          '</p></div>' +
+          '<div><p class="text-on-surface-variant text-[10px] uppercase tracking-widest">Trial active</p><p class="font-bold text-white">' +
+          (trialActive ? "Yes" : "No") +
+          '</p></div>' +
+          '<div><p class="text-on-surface-variant text-[10px] uppercase tracking-widest">Trial ends</p><p class="font-bold text-white">' +
+          trialEnds +
+          "</p></div>" +
+          "</div></div>";
+
+        var isActive = String(status).toLowerCase() === "active";
+        if (isActive && button) {
+          button.disabled = true;
+          button.classList.add("opacity-40", "pointer-events-none", "cursor-not-allowed");
+        }
+        if (hint && isActive) {
+          hint.textContent = "Your subscription is already active.";
+        }
+      }
+
+      async function loadPlanStatus() {
+        var token = localStorage.getItem("access_token");
+        if (!token) {
+          renderPlanStatus(null, "local");
+          return;
+        }
+        try {
+          var res = await fetch(VERIFY_TOKEN_ENDPOINT, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token
+            },
+            body: "{}"
+          });
+          var data = await res.json().catch(function () {
+            return {};
+          });
+          if (!res.ok || data.success === false) {
+            renderPlanStatus(null, "api");
+            return;
+          }
+          renderPlanStatus(data, "api");
+        } catch (e) {
+          renderPlanStatus(null, "api");
+        }
+      }
+
+      function showToast(message) {
+        var el = document.getElementById("subscription-toast");
+        if (!el) return;
+        el.textContent = message;
+        el.classList.remove("opacity-0", "translate-y-2", "pointer-events-none");
+        el.classList.add("opacity-100", "translate-y-0");
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(function () {
+          el.classList.add("opacity-0", "translate-y-2", "pointer-events-none");
+          el.classList.remove("opacity-100", "translate-y-0");
+        }, 3600);
+      }
+
+      async function startSubscription() {
+        var key = (window.STRIPE_PUBLISHABLE_KEY || "").trim();
+        var priceId = (window.STRIPE_MONTHLY_PRICE_ID || "").trim();
+
+        if (!key || key === DEFAULT_KEY) {
+          showToast("Add your Stripe publishable key in subscription.html.");
+          return;
+        }
+        if (!priceId || priceId === DEFAULT_PRICE) {
+          showToast("Add your Stripe monthly price id in subscription.html.");
+          return;
+        }
+        if (typeof window.Stripe !== "function") {
+          showToast("Stripe.js failed to load. Refresh and try again.");
+          return;
+        }
+
+        var stripe = window.Stripe(key);
+        var button = document.getElementById("subscribe-btn");
+        if (button) button.disabled = true;
+
+        try {
+          var result = await stripe.redirectToCheckout({
+            mode: "subscription",
+            lineItems: [{ price: priceId, quantity: 1 }],
+            successUrl: window.location.origin + "/profile.html?subscription=success",
+            cancelUrl: window.location.href
+          });
+          if (result && result.error && result.error.message) {
+            showToast(result.error.message);
+          }
+        } catch (err) {
+          showToast("Could not start Stripe checkout right now.");
+        } finally {
+          if (button) button.disabled = false;
+        }
+      }
+
+      var btn = document.getElementById("subscribe-btn");
+      if (btn) btn.addEventListener("click", startSubscription);
+      loadPlanStatus();
+    })();
+  </script>
+</body>
+</html>
